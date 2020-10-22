@@ -35,8 +35,9 @@ var connection = mysql.createConnection({
           "View all Roles",
         "View All Employees by Department", 
         "View all Employees by Manager", 
-        "Add Employee",
-        "Add Department",
+        "Add an Employee",
+        "Add a Department",
+        "Add a Role",
         "Remove Employee",
         "Update Employee Role", 
         "Update Employee Manager",
@@ -59,7 +60,10 @@ var connection = mysql.createConnection({
           addEmployee();
         } else if (val.name === "Add Department") {
           addDepartment();
-        } else if (val.name === "Remove Employee") {
+        } else if(val.name === "Add a Role") {
+          addRole();
+        }
+        else if (val.name === "Remove Employee") {
           removeEmployee();
         } else if (val.name === "Update Employee Role") {
           updateEmployRole();
@@ -105,7 +109,7 @@ var connection = mysql.createConnection({
  };
 
 function showEmploybyDepart (){
-   connection.query("SELECT * FROM department GROUP BY department ORDER BY department", function (err, res){
+   connection.query("SELECT employee.id, employee.first_name, employee.last_name,role.title FROM employee LEFT JOIN role ON employee.role_id=role.id  LEFT JOIN department department on role.department_id = department.id  AT department.id ", function (err, res){
     if (err) throw err;
     console.log(err);
     console.table(res)
@@ -173,6 +177,35 @@ function addEmployee(){
   })
 })
 };
+
+function addRole(){
+  //prompts for new employee info
+  inquirer.prompt([{
+
+    type: "input",
+    name: "title",
+    message: "What is the title of this role?"
+
+  },
+  {
+    type: "number",
+    name: "salary",
+    message:"What is the salary of this role?"
+  },
+   {
+     type: "number",
+     name:"department_id",
+     message:"What is the Department ID??"
+   },
+]).then( function (res){
+  connection.query("INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)", [res.title, res.salary, res.department_id], function (err, data){
+    if (err) throw err;
+    console.table("Role Sucessfully Added");
+    
+  })
+  menu();
+})
+}; 
 
 function updateEmployRole(){
 
