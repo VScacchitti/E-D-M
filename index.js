@@ -32,6 +32,7 @@ var connection = mysql.createConnection({
         choices: [
           "View all Employees", 
           "View all Departments",
+          "View all Roles",
         "View All Employees by Department", 
         "View all Employees by Manager", 
         "Add Employee",
@@ -39,7 +40,8 @@ var connection = mysql.createConnection({
         "Remove Employee",
         "Update Employee Role", 
         "Update Employee Manager",
-        "View all Roles"],
+        "Quit"
+        ],
       })
       .then((val) => {
 
@@ -63,13 +65,13 @@ var connection = mysql.createConnection({
           updateEmployRole();
         }  else if (val.name === "Update Employee Manager") {
           updateEmployManager();
-        } else if (val.name === "View All Rolesr") {
-          showRoles();
-         } else {
-          connection.end();
+        } else if (val.name === "View all Roles") {
+            showRoles();
+         } else if (val.name === "Quit") {
+           connection.end();
         }
       });
-  }
+    };
 //displays all from apartment
  function showDepartments(){
 
@@ -84,7 +86,7 @@ var connection = mysql.createConnection({
  };
 
  function showRoles(){
-   connection.query("SELECT * FROM role", function (err, res){
+   connection.query("SELECT * FROM roles", function (err, res) {
      if (err) throw err;
      console.log(err);
      console.table(res)
@@ -98,10 +100,8 @@ var connection = mysql.createConnection({
      if (err) throw err;
      console.log(err);
      console.table(res)
-     menu();
    })
-   
-
+   menu();
  };
 
 function showEmploybyDepart (){
