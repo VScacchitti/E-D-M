@@ -1,21 +1,18 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const util = require("util");
 const conTable = require("console.table");
 
-
-
-
+// connects to mysql, and logs if you are connected
 var connection = mysql.createConnection({
     host: "localhost",
   
     // Your port; if not 3306
     port: 3306,
   
-    // Your username
+    //username
     user: "test_user",
   
-    // Your password
+    // password and database
     password: "password",
     database: "employee_db"
   });
@@ -26,7 +23,7 @@ var connection = mysql.createConnection({
     connection.end();
     start();
   });
-
+//menu function 
   function menu() {
     inquirer
       .prompt({
@@ -36,86 +33,52 @@ var connection = mysql.createConnection({
         choices: ["View all Department", "Add a Department", "Delete a Department", "View all Roles", "Add a Role","Delete a Role","View all Employees", "Add an Employee", "Delete an Employee","Update Employee Role","Update Employee Manager","Show Employee by Department","Ouit"]
       })
       .then(function(answer) {
-        // based on their answer, either call the bid or the post functions
+
        
       });
   }
-
+//displays all from apartment
  function showDepartments(){
 
-  connection.query("SELECT * FROM department", (err,res)=> {
+  connection.query("SELECT * FROM department", function (err, res) {
     if (err) throw err;
-
-    if (res.length > 0 ) {
-      console.log("\n")
-      console.log("-- Departments --")
-      console.log("\n")
-      console.table(res);
-    }
-    
+    console.log(err);
+    console.table(res)
   })
+
+
  };
 
  function showRoles(){
+   connection.query("SELECT * FROM role", function (err, res){
+     if (err) throw err;
+     console.log(err);
+     console.table(res)
+   })
 
-  connection.query("SELECT role.title AS job_title, role.id, department..name AS department_name, role.salary FROM role LEFT JOIN department ON role.department_id=department.id", (err,res)=> {
-    if (err) throw err;
-
-    if (res.length > 0 ) {
-      console.log("\n")
-      console.log("-- Roles --")
-      console.log("\n")
-      console.table(res);
-    }
-    
-  })
-
-
-
-  
  };
 
  function showEmployees(){
+   connection.query("SELECT * FROM employee", function (err, res){
+     if (err) throw err;
+     console.log(err);
+     console.table(res)
+   })
    
-  connection.query(`SELECT employee.id, employee.first_name,employee.last_name,role.title AS job_title,role.salary,
-       CONCAT(manager.first_name ," ", manager.last_name) AS Manager FROM  employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN employee  manager ON manager.id = employee.manager_id`, (err, res) => {
-  
-
-    if (err) throw err;
-
-    if (res.length > 0) {
-      console.log('\n')
-      console.log('** Employees **')
-      console.log('\n')
-      console.table(res);
-    }
-    
-    
-  });
-
-
-
-
-
 
  };
-å
+
+  async function selectEmployee () {
+
+
+  
+};
 
 
 
 
   function addDepartmnet() {
-    inquirer
-      .prompt({
-        name: "options",
-        type: "list",
-        message: "Please choose an option.",
-        choices: ["View all Department", "Add a Department", "Delete a Department", "View all Roles", "Add a Role","Delete a Role","View all Employees", "Add an Employee", "Delete an Employee","Update Employee Role","Update Employee Manager","Show Employee by Department","Ouit"]
-      })
-      .then(function(answer) {
-        // based on their answer, either call the bid or the post functions
-       
-      });
+    
   }
 
   function addRole() {}
