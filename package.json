@@ -1,16 +1,17 @@
 {
-    "name": "employee-tracker-app",
-    "version": "1.0.0",
-    "description": "An command line employee database application",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-      "mysql": "^2.18.1",
-      "inquirer":"^7.3.3",
-      "console.table": "0.10.0"
-    }
+  "name": "employee-tracker-app",
+  "version": "1.0.0",
+  "description": "An command line employee database application",
+  "main": "index.js",
+  "scripts": {
+    "start": "index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
   }
+}

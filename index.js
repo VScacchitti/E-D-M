@@ -20,14 +20,13 @@ var connection = mysql.createConnection({
   connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
-    connection.end();
-    start();
+    menu();
   });
 //menu function 
   function menu() {
     inquirer
       .prompt({
-        name: "options",
+        name: "name",
         type: "list",
         message: "What would you like to do?",
         choices: [
@@ -40,58 +39,33 @@ var connection = mysql.createConnection({
         "Remove Employee",
         "Update Employee Role", 
         "Update Employee Manager",
-        "View all Roles",
-        "Ouit"],
+        "View all Roles"],
       })
-      .then(function(answer) {
+      .then((val) => {
 
-        console.log(answer.options);
+        console.log(val.name);
 
-        switch(answers.options) {
-          //switch statement to take care of choice logic
-          case "View All Employees":
-            showEmployees();
-            break;
-
-          case "View all Departments" :
-            showDepartments();
-            break;
-          
-          case "View All Employees by Department" :
-            showEmploybyDepart();
-            break;
-
-          case "View All Employees by Manager" :
-            showEmploybyManager();
-            break;
-
-          case "Add Employee" :
-            addEmployee();
-            break;
-
-          case "Add Department" :
-            addDepartment();
-            break;
-
-            case "Remove Employee" :
-              removeEmployee();
-              break;
-            
-            case "Update Employee Role" :
-              updateEmployRole();
-              break;
-            
-            case "Update Employee Manager" :
-              updateEmployManager();
-              break;
-
-              case "View All Roles" :
-                showRoles();
-                break;
-
-                default : connection.end();
-                break;        
-        }      
+        if (val.name === "View all Employees") {
+          showEmployees();
+        } else if (val.name === "View all Departments") {
+          showDepartments();
+        } else if (val.name === "View All Employees by Department") {
+          showEmploybyDepart();
+        } else if (val.name === "View all Employees by Manager") {
+          showEmploybyManager();
+        } else if (val.name === "Add Employee") {
+          addEmployee();
+        } else if (val.name === "Add Department") {
+          addDepartment();
+        } else if (val.name === "Remove Employee") {
+          removeEmployee();
+        } else if (val.name === "Update Employee Role") {
+          updateEmployRole();
+        } else if (val.name === "Update Employee Manager") {
+          updateEmployManager();
+        } else {
+          connection.end();
+        }
       });
   }
 //displays all from apartment
@@ -101,8 +75,9 @@ var connection = mysql.createConnection({
     if (err) throw err;
     console.log(err);
     console.table(res)
-    menu();
+    
   })
+  menu();
 
  };
 
@@ -117,7 +92,7 @@ var connection = mysql.createConnection({
  };
 
  function showEmployees(){
-   connection.query("SELECT * FROM employee", function (err, res){
+   connection.query("SELECT * FROM employee", function (err, res) {
      if (err) throw err;
      console.log(err);
      console.table(res)
@@ -128,7 +103,7 @@ var connection = mysql.createConnection({
  };
 
 function showEmploybyDepart (){
-   connection.query("SELECT * FROM employee GROUP BY department ORDER BY department", function (err, res){
+   connection.query("SELECT * FROM department GROUP BY department ORDER BY department", function (err, res){
     if (err) throw err;
     console.log(err);
     console.table(res)
