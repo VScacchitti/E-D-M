@@ -36,12 +36,12 @@ var connection = mysql.createConnection({
         "View All Employees by Department", 
         "View all Employees by Manager", 
         "Add Employee",
+        "Add Department",
         "Remove Employee",
         "Update Employee Role", 
         "Update Employee Manager",
         "View all Roles",
         "Ouit"],
-       
       })
       .then(function(answer) {
 
@@ -69,6 +69,10 @@ var connection = mysql.createConnection({
             addEmployee();
             break;
 
+          case "Add Department" :
+            addDepartment();
+            break;
+
             case "Remove Employee" :
               removeEmployee();
               break;
@@ -86,12 +90,8 @@ var connection = mysql.createConnection({
                 break;
 
                 default : connection.end();
-                break;
-
-          
-        }
-
-       
+                break;        
+        }      
       });
   }
 //displays all from apartment
@@ -103,7 +103,6 @@ var connection = mysql.createConnection({
     console.table(res)
     menu();
   })
-
 
  };
 
@@ -128,12 +127,24 @@ var connection = mysql.createConnection({
 
  };
 
+function showEmploybyDepart (){
+   connection.query("SELECT * FROM employee", function (err, res){
+    if (err) throw err;
+    console.log(err);
+    console.table(res)
+    menu();
+  })
   
+};
 
-
-function showEmploybyDepart (){};
-
-function showEmploybyManager(){};
+function showEmploybyManager(){
+  connection.query("SELECT * FROM employee", function (err, res){
+    if (err) throw err;
+    console.log(err);
+    console.table(res)
+    menu();
+  })
+};
 
 function addEmployee(){
   //prompts for new employee info
@@ -166,4 +177,78 @@ function addEmployee(){
     menu();
   })
 })
+};
+
+function addDepartment () {
+  inquirer.prompt([{
+
+    type: "input",
+    name: "department",
+    message: "What kind of department would you like to add?"
+
+  },
+]).then( function (res){
+  connection.query("INSERT INTO department (name) VALUES(?)", [res.department], function (err, data){
+    if (err) throw err;
+    console.table("Department Sucessfully Added");
+    menu();
+  })
+})
+};
+
+function updateEmployRole(){
+
+  inquirer.prompt([{
+
+    type: "input",
+    name: "name",
+    message: "Which Employee would like to update?(Use last name)"
+
+  },
+  {
+    type:"number",
+    name: "role_id",
+    message: "Please enter department ID."
+  }
+]).then( function (res){
+  connection.query("UPDATE employee SET role_id = ? WHERE last_name = ?", [res.role_id, res.name], function (err, data){
+    if (err) throw err;
+    console.table(data)
+    console.table("Employee Sucessfully Updated");
+    
+  })
+  menu();
+})
+  
 }
+
+function updateEmployManager () {
+
+  inquirer.prompt([{
+
+    type: "input",
+    name: "name",
+    message: "Which Employee would like to update?(Use last name)"
+
+  },
+  {
+    type:"number",
+    name: "manager_id",
+    message: "Please enter manager ID."
+  }
+]).then( function (res){
+  connection.query("UPDATE employee SET manager_id = ? WHERE last_name = ?", [res.manager_id, res.name], function (err, data){
+    if (err) throw err;
+    console.table(data)
+    console.table("Employee Sucessfully Updated");
+    
+  })
+  menu();
+})
+
+}
+
+function removeEmployee(){
+  
+}
+  
