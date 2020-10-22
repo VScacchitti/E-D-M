@@ -128,7 +128,7 @@ var connection = mysql.createConnection({
  };
 
 function showEmploybyDepart (){
-   connection.query("SELECT * FROM employee", function (err, res){
+   connection.query("SELECT * FROM employee GROUP BY department ORDER BY department", function (err, res){
     if (err) throw err;
     console.log(err);
     console.table(res)
@@ -138,7 +138,7 @@ function showEmploybyDepart (){
 };
 
 function showEmploybyManager(){
-  connection.query("SELECT * FROM employee", function (err, res){
+  connection.query("SELECT * FROM employee GROUP BY manager_id ORDER BY manager_id ", function (err, res){
     if (err) throw err;
     console.log(err);
     console.table(res)
@@ -249,6 +249,23 @@ function updateEmployManager () {
 }
 
 function removeEmployee(){
-  
-}
+
+  inquirer.prompt([{
+
+    type: "input",
+    name: "name",
+    message: "Which Employee would like to remove?(Use last name)"
+
+  },
+]).then( function (res){
+  connection.query("DELETE FROM employee WHERE name = ?", [res.name], function (err, data){
+    if (err) throw err;
+    console.table(data)
+    console.table("Employee Sucessfully Removed");
+    
+  })
+  menu();
+})
+
+};
   
