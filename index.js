@@ -29,10 +29,67 @@ var connection = mysql.createConnection({
       .prompt({
         name: "options",
         type: "list",
-        message: "Please choose an option.",
-        choices: ["View all Department", "Add a Department", "Delete a Department", "View all Roles", "Add a Role","Delete a Role","View all Employees", "Add an Employee", "Delete an Employee","Update Employee Role","Update Employee Manager","Show Employee by Department","Ouit"]
+        message: "What would you like to do?",
+        choices: [
+          "View all Employees", 
+          "View all Departments",
+        "View All Employees by Department", 
+        "View all Employees by Manager", 
+        "Add Employee",
+        "Remove Employee",
+        "Update Employee Role", 
+        "Update Employee Manager",
+        "View all Roles",
+        "Ouit"],
+       
       })
       .then(function(answer) {
+
+        console.log(answer.options);
+
+        switch(answers.options) {
+          //switch statement to take care of choice logic
+          case "View All Employees":
+            showEmployees();
+            break;
+
+          case "View all Departments" :
+            showDepartments();
+            break;
+          
+          case "View All Employees by Department" :
+            showEmploybyDepart();
+            break;
+
+          case "View All Employees by Manager" :
+            showEmploybyManager();
+            break;
+
+          case "Add Employee" :
+            addEmployee();
+            break;
+
+            case "Remove Employee" :
+              removeEmployee();
+              break;
+            
+            case "Update Employee Role" :
+              updateEmployRole();
+              break;
+            
+            case "Update Employee Manager" :
+              updateEmployManager();
+              break;
+
+              case "View All Roles" :
+                showRoles();
+                break;
+
+                default : connection.end();
+                break;
+
+          
+        }
 
        
       });
@@ -68,24 +125,24 @@ var connection = mysql.createConnection({
 
  };
 
-  async function selectEmployee () {
-
-
   
-};
 
 
+function showEmploybyDepart (){};
 
+function showEmploybyManager(){};
 
-  function addDepartmnet() {
-    
+function addEmployee(){
+  //prompts for new employee info
+  inquirer.prompt([{
+
+    type: "input",
+    name: "firstName",
+    message: "What is the employee's first name?"
+
+  },
+  {
+    type: "input"
   }
-
-  function addRole() {}
-
-  function addEmployee(){
-
-  }
-
-  function deleteDepartment(){};
-  function deleteRole() {}
+])
+}
