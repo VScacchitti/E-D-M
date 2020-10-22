@@ -101,6 +101,7 @@ var connection = mysql.createConnection({
     if (err) throw err;
     console.log(err);
     console.table(res)
+    menu();
   })
 
 
@@ -111,6 +112,7 @@ var connection = mysql.createConnection({
      if (err) throw err;
      console.log(err);
      console.table(res)
+     menu();
    })
 
  };
@@ -120,6 +122,7 @@ var connection = mysql.createConnection({
      if (err) throw err;
      console.log(err);
      console.table(res)
+     menu();
    })
    
 
@@ -142,7 +145,25 @@ function addEmployee(){
 
   },
   {
-    type: "input"
-  }
-])
+    type: "input",
+    name: "lastName",
+    message:"What is the employee's last name?"
+  },
+   {
+     type: "number",
+     name:"roleId",
+     message:"What is the employee's role ID?"
+   },
+   {
+     type: "number",
+     name:"managerid",
+     message: "What is the employee's manager ID?"
+   }
+]).then( function (res){
+  connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(?,?,?,?)", [res.firstName, res.LastName, res.roleID, res.managerID], function (err, data){
+    if (err) throw err;
+    console.table("Employee Sucessfully Added");
+    menu();
+  })
+})
 }
