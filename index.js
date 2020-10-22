@@ -237,7 +237,7 @@ function removeEmployee(){
 
   },
 ]).then( function (res){
-  connection.query("DELETE FROM employee WHERE name = ?", [res.name], function (err, data){
+  connection.query("DELETE FROM employee WHERE last_name = ?", [res.name], function (err, data){
     if (err) throw err;
     console.table(data)
     console.table("Employee Sucessfully Removed");
