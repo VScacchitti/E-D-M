@@ -5,6 +5,7 @@ const conTable = require("console.table");
 
 
 
+
 var connection = mysql.createConnection({
     host: "localhost",
   
@@ -75,8 +76,23 @@ var connection = mysql.createConnection({
  };
 
  function showEmployees(){
-
    
+  connection.query(`SELECT employee.id, employee.first_name,employee.last_name,role.title AS job_title,role.salary,
+       CONCAT(manager.first_name ," ", manager.last_name) AS Manager FROM  employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN employee  manager ON manager.id = employee.manager_id`, (err, res) => {
+  
+
+    if (err) throw err;
+
+    if (res.length > 0) {
+      console.log('\n')
+      console.log('** Employees **')
+      console.log('\n')
+      console.table(res);
+    }
+    
+    
+  });
+
 
 
 
