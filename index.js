@@ -61,9 +61,11 @@ var connection = mysql.createConnection({
           removeEmployee();
         } else if (val.name === "Update Employee Role") {
           updateEmployRole();
-        } else if (val.name === "Update Employee Manager") {
+        }  else if (val.name === "Update Employee Manager") {
           updateEmployManager();
-        } else {
+        } else if (val.name === "View All Rolesr") {
+          showRoles();
+         } else {
           connection.end();
         }
       });
@@ -86,9 +88,9 @@ var connection = mysql.createConnection({
      if (err) throw err;
      console.log(err);
      console.table(res)
-     menu();
+    
    })
-
+   menu();
  };
 
  function showEmployees(){
@@ -126,27 +128,27 @@ function addEmployee(){
   inquirer.prompt([{
 
     type: "input",
-    name: "firstName",
+    name: "first_name",
     message: "What is the employee's first name?"
 
   },
   {
     type: "input",
-    name: "lastName",
+    name: "last_name",
     message:"What is the employee's last name?"
   },
    {
      type: "number",
-     name:"roleId",
+     name:"role_id",
      message:"What is the employee's role ID?"
    },
    {
      type: "number",
-     name:"managerid",
+     name:"manager_id",
      message: "What is the employee's manager ID?"
    }
 ]).then( function (res){
-  connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES(?,?,?,?)", [res.firstName, res.LastName, res.roleID, res.managerID], function (err, data){
+  connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)", [res.first_name, res.last_name, res.role_id, res.manager_id], function (err, data){
     if (err) throw err;
     console.table("Employee Sucessfully Added");
     menu();
@@ -154,8 +156,9 @@ function addEmployee(){
 })
 };
 
-function addDepartment () {
-  inquirer.prompt([{
+ function addDepartment () {
+   
+   inquirer.prompt([{
 
     type: "input",
     name: "department",
@@ -173,6 +176,7 @@ function addDepartment () {
 
 function updateEmployRole(){
 
+  
   inquirer.prompt([{
 
     type: "input",
@@ -199,7 +203,7 @@ function updateEmployRole(){
 
 function updateEmployManager () {
 
-  inquirer.prompt([{
+   inquirer.prompt([{
 
     type: "input",
     name: "name",
@@ -225,7 +229,7 @@ function updateEmployManager () {
 
 function removeEmployee(){
 
-  inquirer.prompt([{
+  return inquirer.prompt([{
 
     type: "input",
     name: "name",
