@@ -38,7 +38,9 @@ var connection = mysql.createConnection({
         "Add an Employee",
         "Add a Department",
         "Add a Role",
-        "Remove Employee",
+        "Remove an Employee",
+        "Remove a Department",
+        "Remove a Role",
         "Update Employee Role", 
         "Update Employee Manager",
         "Quit"
@@ -56,15 +58,18 @@ var connection = mysql.createConnection({
           showEmploybyDepart();
         } else if (val.name === "View all Employees by Manager") {
           showEmploybyManager();
-        } else if (val.name === "Add Employee") {
+        } else if (val.name === "Add an Employee") {
           addEmployee();
-        } else if (val.name === "Add Department") {
+        } else if (val.name === "Add a Department") {
           addDepartment();
         } else if(val.name === "Add a Role") {
           addRole();
-        }
-        else if (val.name === "Remove Employee") {
+        } else if (val.name === "Remove an Employee") {
           removeEmployee();
+        } else if(val.name === "Remove a Department"){
+          removeDepartment();
+        } else if (val.name === "Remove a Role") {
+          removeRole();
         } else if (val.name === "Update Employee Role") {
           updateEmployRole();
         }  else if (val.name === "Update Employee Manager") {
@@ -262,7 +267,7 @@ function updateEmployManager () {
 
 function removeEmployee(){
 
-  return inquirer.prompt([{
+ inquirer.prompt([{
 
     type: "input",
     name: "name",
@@ -274,6 +279,48 @@ function removeEmployee(){
     if (err) throw err;
     console.table(data)
     console.table("Employee Sucessfully Removed");
+    
+  })
+  menu();
+})
+
+};
+
+function removeDepartment(){
+
+  inquirer.prompt([{
+
+    type: "input",
+    name: "name",
+    message: "Which Department would like to remove?"
+
+  },
+]).then( function (res){
+  connection.query("DELETE FROM department WHERE name = ?", [res.name], function (err, data){
+    if (err) throw err;
+    console.table(data)
+    console.table("Department Sucessfully Removed");
+    
+  })
+  menu();
+})
+
+};
+
+function removeRole() {
+
+   inquirer.prompt([{
+
+    type: "number",
+    name: "id",
+    message: "What is the ID of the role to be removed?"
+
+  },
+]).then( function (res){
+  connection.query("DELETE FROM roles WHERE id = ?", [res.id], function (err, data){
+    if (err) throw err;
+    console.table(data)
+    console.table("Role Sucessfully Removed");
     
   })
   menu();
