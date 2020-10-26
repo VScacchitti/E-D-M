@@ -87,7 +87,12 @@ var connection = mysql.createConnection({
   connection.query("SELECT * FROM department", function (err, res) {
     if (err) throw err;
     console.log(err);
-    console.table(res)
+// Prints Department
+    if (res) {
+      console.log("\n")
+    console.log("-- Departments --")
+    console.log('\n')
+    console.table(res);}
     
   })
   menu();
@@ -98,7 +103,13 @@ var connection = mysql.createConnection({
    connection.query("SELECT * FROM roles", function (err, res) {
      if (err) throw err;
      console.log(err);
-     console.table(res)
+
+     //Prints Roles
+     if (res) {
+       console.log("\n")
+     console.log("-- Roles --")
+     console.log('\n')
+     console.table(res);}
     
    })
    menu();
@@ -108,13 +119,18 @@ var connection = mysql.createConnection({
    connection.query("SELECT * FROM employee", function (err, res) {
      if (err) throw err;
      console.log(err);
-     console.table(res)
+
+     // Prints employeea
+     if (res) {console.log("\n")
+     console.log("-- Employees --")
+     console.log('\n')
+     console.table(res);}
    })
    menu();
  };
 
 function showEmploybyDepart (){
-   connection.query("SELECT employee.id, employee.first_name, employee.last_name,role.title FROM employee LEFT JOIN role ON employee.role_id=role.id  LEFT JOIN department department on role.department_id = department.id  AT department.id ", function (err, res){
+   connection.query("SELECT employee.id, employee.first_name, employee.last_name,role.title FROM employee LEFT JOIN role ON employee.role_id=role.id  LEFT JOIN department department on department.department_id = department.id  AT department.id ", function (err, res){
     if (err) throw err;
     console.log(err);
     console.table(res)
@@ -127,10 +143,52 @@ function showEmploybyManager(){
   connection.query("SELECT * FROM employee GROUP BY manager_id ORDER BY manager_id ", function (err, res){
     if (err) throw err;
     console.log(err);
+
     console.table(res)
     menu();
   })
 };
+
+//Return Employee obnject
+async function returnEmployee() {
+  let response = await connection.query("SELECT CONCAT(employee.first_name,' ',employee.last_name) AS fullName, employee.id FROM employee")
+  let employeeName = [];
+  response.forEach( employee => {
+    employeeName.push({ name: employee.fullName, value: employee.id })
+
+  })
+  
+  return employeeName;
+
+
+}
+
+async function returnDepartment() {
+  let response = await connection.query("SELECT * FROM department")
+  let departmentName = [];
+  response.forEach( department => {
+    departmentName.push({ name: department.name, value: department.id })
+
+  })
+  
+  return departmentName;
+
+}
+
+async function returnRoles() {
+  let response = await connection.query("SELECT role.title, role.id FORM role")
+  let roleName = [];
+  response.forEach( role => {
+    roleName.push({ name: employee.fullName, value: employee.id })
+
+  })
+  
+  return roleName;
+
+
+}
+
+
 
 function addEmployee(){
   //prompts for new employee info
@@ -239,7 +297,7 @@ function updateEmployRole(){
   
 }
 
-function updateEmployManager () {
+function updateEmployManager() {
 
    inquirer.prompt([{
 
