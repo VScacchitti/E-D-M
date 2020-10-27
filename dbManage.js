@@ -121,7 +121,7 @@ addEmployee =  (addEmployeeCB) => {
    if (res.manager_id){
      data.manager_id = res.manager_id
    };
-   
+
    connection.query("INSERT INTO employee SET ?", data, function (err, res) {
      console.log(err);
      console.log("New employee added sucessfully.");
@@ -186,7 +186,7 @@ addEmployee =  (addEmployeeCB) => {
       message:"What is the salary of this role?"
     },
      {
-       type: "number",
+       type: "input",
        name:"department_id",
        message:"What is the Department ID for this role?"
      },
@@ -227,7 +227,7 @@ addEmployee =  (addEmployeeCB) => {
        {
  
     type: "input",
-    name: "employee_id",
+    name: "id",
     message: "What is the ID of the employee you would like to update?"
 
   },
@@ -239,7 +239,7 @@ addEmployee =  (addEmployeeCB) => {
 ]).then((res) => {
   connection.query("UPDATE employee SET ? WHERE ?", [
       {role_id: res.role_id},
-      {id: res.employee_id },
+      {id: res.id },
 
   ], function (err, res) {
     console.log(err);
@@ -384,6 +384,8 @@ addEmployee =  (addEmployeeCB) => {
   })
 };
  
+
+
 
 //Quit Function
 quitApp = (quitAppCB) => {

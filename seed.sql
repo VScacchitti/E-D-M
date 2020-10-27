@@ -1,16 +1,16 @@
 INSERT INTO department
-    (id, deptName)
+    (deptName)
 VALUES
-    (1, "Human Resources");
+    ("Human Resources");
 
 INSERT INTO department
-    (id, deptName)
+    (deptName)
 VALUES
-    (2, "IT");
+    ("IT");
 INSERT INTO department
-    (id, deptName)
+    (deptName)
 VALUES
-    (3, "Legal");
+    ("Legal");
 
 
 INSERT INTO role
