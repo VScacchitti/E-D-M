@@ -1,6 +1,5 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-require("dotenv").config();
 const conTable = require("console.table");
 
 // connects to mysql, and logs if you are connected
@@ -21,7 +20,7 @@ var connection = mysql.createConnection({
   connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
-    menu();
+  
   });
 
 //-------------------------------------------------------
@@ -63,7 +62,7 @@ showRoles = (showRolesCB) => {
  
  // show employees
 showEmployees = (showEmployeeCB) => {
-    connection.query('SELECT * FROM employee INNER JOIN	role ON employee.roleId = role.id INNER JOIN department ON role.departmentId = department.id', function (err, res) {
+    connection.query('SELECT * FROM employee INNER JOIN	role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id', function (err, res) {
       if (err) {
         console.log(err);
       } else {
@@ -84,7 +83,7 @@ showEmployees = (showEmployeeCB) => {
 //-------------------------------------------------------
 
 //Add a New Employee
-addEmployee =(addEmployeeCB) => {
+addEmployee =  (addEmployeeCB) => {
    //prompts for new employee info
    inquirer.prompt([{
  
@@ -99,16 +98,16 @@ addEmployee =(addEmployeeCB) => {
      message:"What is the employee's last name?"
    },
     {
-      type: "number",
+      type: "input",
       name:"role_id",
       message:"What is the employee's role ID?"
     },
     {
-      type: "number",
+      type: "input",
       name:"manager_id",
       message: "What is the employee's manager ID?"
     }
- ]).then( function (res){
+ ]).then( function (res) {
 
   let data = {
     first_name: res.first_name,
@@ -120,7 +119,7 @@ addEmployee =(addEmployeeCB) => {
   }
   connection.query("INSERT INTO employee SET ?", data, function (err, res) {
     console.log(err);
-    console.log(`${res.first_name} ${res.last_name}'s profile was created successfully!`);
+    console.log("New employee added sucessfully.");
   // Displays employees
   showEmployees(addEmployeeCB);
 });
@@ -141,9 +140,9 @@ addEmployee =(addEmployeeCB) => {
  ]).then( function (res) {
    connection.query("INSERT INTO department SET ?", [
      {deptName:res.department}
-    ], function (err, data){
+    ], function (err, res){
      
-     console.console.log(`Department ${res.department} was added successfully.`);
+     console.log('Department was added successfully.');
      
      showDepartments(addDepartCB);
    })
@@ -191,73 +190,72 @@ addEmployee =(addEmployeeCB) => {
 //-------------------------------------------------------
  
 
- function updateRole(updateEmployeeRoleCB){
+  updateRole = (updateEmployeeRoleCB) => {
      connection.query("SELECT * FROM employee", function (err, res){
          console.table(res);
 
-
-   inquirer.prompt([{
+  //Use the response to populate
+   inquirer.prompt(
+     [
+       {
  
-    type: "number",
-    name: "employeeID",
+    type: "input",
+    name: "employee_id",
     message: "What is the ID of the employee you would like to update?"
 
   },
   {
-    type:"number",
-    name: "employeeUpdateRole",
+    type:"input",
+    name: "role_id",
     message: "What is the ID of this employees new role?"
   }
-]).then( function (res){
+]).then((res) => {
   connection.query("UPDATE employee SET ? WHERE ?", [
-      {role_id: res.employeeUpdateRole},
-      { id: res.employeeID },
+      {role_id: res.role_id},
+      {id: res.employee_id },
 
-  ], function (err, data){
-    if (err) throw err;
-    console.log(err)
-    console.table("Employee Sucessfully Updated");
+  ], function (err, res) {
+    console.log(err);
+    
     showEmployees(updateEmployeeRoleCB);
     
-  })
+  });
   
 })
-     })
+ })
+    
+ };
  
-   
-   
- }
- 
- function updateManager(updateEmployeeManCB) {
+ updateManager = (updateEmployeeManCB) => {
 
     connection.query("SELECT * FROM employee", function (err, res){
         console.table(res);
 
         inquirer.prompt([{
  
-            type: "number",
-            name: "employeeID",
+            type: "input",
+            name: "employee_id",
             message: "What is the ID of the employee you would like to update"
         
           },
           {
-            type:"number",
-            name: "employeeUpdateMan",
+            type:"input",
+            name: "manager_id",
             message: "Please enter manager's employee ID to update this employee's manager."
           }
         ]).then( function (res){
           connection.query("UPDATE employee SET ? WHERE ?", [
               {
-                  manager_id : res.employeeUpdateMan
+                  manager_id : res.manager_id
               },
               {
-                  id: res.employeeList
+                  id: res.employee_id
               }
 
-          ], function (err, data){
-            if (err) throw err;
+          ], function (err, res){
+            
             console.log(err);
-            console.table("---Employee's manager has been successfully updated ---");
+            console.log("--- Employee's manager has been successfully updated ---");
 
             showEmployees(updateEmployeeManCB);
             
@@ -267,22 +265,26 @@ addEmployee =(addEmployeeCB) => {
     });
  }
  
+ //-------------------------------------------------------
+//  Functions to update employee role and manager
+//-------------------------------------------------------
 
- //DELETE FUNCTIONS
- function removeEmployee(removeEmployeeCB){
+//Remove Employee
+
+ removeEmployee = (removeEmployeeCB) => {
 
     connection.query("SELECT * FROM employee", function (err, res){
         console.table(res);
 
         inquirer.prompt([{
  
-            type: "number",
-            name: "removeEmployee",
+            type: "input",
+            name: "id",
             message: "What is the ID of the employee you would like to remove?"
         
           },
         ]).then( function (res){
-            let newID = Number(res.removeEmployee)
+            let newID = Number(res.id)
           connection.query("DELETE FROM employee WHERE ?", [
               {
                   id: newID
@@ -296,31 +298,24 @@ addEmployee =(addEmployeeCB) => {
           })
           
         })
-
-
     })
- 
-  
- 
  };
  
+//Remove Role
+ removeRole = (removeRoleCB) => {
 
- 
- 
- function removeRole(removeRoleCB) {
-
-    connection.query("SELECT * FROM roles", function (err, res){
+    connection.query("SELECT * FROM role", function (err, res){
 
         inquirer.prompt([{
  
-            type: "number",
-            name: "removeRole",
+            type: "input",
+            name: "id",
             message: "What is the ID of the role to be removed?"
         
           },
         ]).then( function (res){
-            let newID = Number(res.removeRole)
-          connection.query("DELETE FROM roles WHERE ?", [{ id: newID}], function (err, data){
+            let newID = Number(res.id)
+          connection.query("DELETE FROM role WHERE ?", [{ id: newID}], function (err, data){
             if (err) throw err;
             
             console.log("Role Sucessfully Removed");
@@ -332,26 +327,27 @@ addEmployee =(addEmployeeCB) => {
     })
  };
 
+//Remove Department
+ removeDepartment = (removeDepartmentCB) => {
 
- function removeDepartment() {
 
-  connection.query("SELECT * FROM roles", function (err, res){
+  connection.query("SELECT * FROM department", function (err, res){
 
       inquirer.prompt([{
 
-          type: "number",
-          name: "removeRole",
+          type: "input",
+          name: "id",
           message: "What is the ID of the role to be removed?"
       
         },
       ]).then( function (res){
-          let newID = Number(res.removeRole)
-        connection.query("DELETE FROM roles WHERE ?", [{ id: newID}], function (err, data){
-          if (err) throw err;
+          let newID = Number(res.id)
+        connection.query("DELETE FROM department WHERE ?", [{ id: newID}], function (err, data){
+         console.log(err);
           
-          console.log("Role Sucessfully Removed");
+          console.log("Department Sucessfully Removed");
 
-          showRoles(removeRoleCB)
+          showDepartments(removeDepartmentCB)
           
         })  
       })
@@ -359,17 +355,20 @@ addEmployee =(addEmployeeCB) => {
 };
  
 
+//Quit Function
+quitApp = (quitAppCB) => {
 
-function Quit(){
+  connection.end();
+  quitAppCB();
+  
 
-}
+};
 
+//-------------------------------------------------------
+// Exporting the functions
+//-------------------------------------------------------
 
-
-
-
-
- module.exports = {
+module.exports = {
    "showDepartments": showDepartments,
    "showRoles": showRoles,
    "showEmployees": showEmployees,
@@ -381,5 +380,5 @@ function Quit(){
    "removeRole": removeRole,
    "updateManager": updateManager,
    "updateRole" : updateRole,
-   "Quit" : Quit
- }
+   "quitApp" : quitApp,
+ };

@@ -28,3 +28,12 @@ Helper Array
 helper employee
 
 Need DB schema
+
+Roles
+Manager-1
+HR Admin-2
+Developer-3
+Sales Associate-4
+Project Manager-5
+
+Make 3 people managers-

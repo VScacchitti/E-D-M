@@ -23,7 +23,7 @@ VALUES("Developer", 87526.02, 2);
 
 INSERT INTO role
     (title, salary, department_id)
-VALUES("Attorney", 91,432.47, 3);
+VALUES("Attorney", 91432.47, 3);
 
 
 

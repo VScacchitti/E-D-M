@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
-const dbmanage = require("./dbManage");
+const dbManage = require("./dbManage");
+const mysql = require("mysql");
 
 // connects to mysql, and logs if you are connected
 var connection = mysql.createConnection({
@@ -19,7 +20,7 @@ var connection = mysql.createConnection({
   connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
-    menu();
+    
   });
 //menu function 
   function menu() {
@@ -108,7 +109,7 @@ var connection = mysql.createConnection({
             });
           break;
 
-          case "Remove an Employeet" :
+          case "Remove an Employee" :
             dbManage.removeEmployee(function () {
               //Brings the menu back up
               menu();
@@ -130,7 +131,7 @@ var connection = mysql.createConnection({
           break;
 
           case "Quit" :
-            dbManage.quit(function () {
+            dbManage.quitApp(function () {
               
               process.exit();
             });
