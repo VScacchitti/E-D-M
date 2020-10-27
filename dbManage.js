@@ -10,10 +10,10 @@ var connection = mysql.createConnection({
     port: 3306,
   
     //username
-    user: "test_user",
+    user: "",
   
     // password and database
-    password: "password",
+    password: "",
     database: "employee_db"
   });
   
@@ -218,7 +218,7 @@ addEmployee =  (addEmployeeCB) => {
  
 
   updateRole = (updateEmployeeRoleCB) => {
-     connection.query("SELECT * FROM employee", function (err, res){
+     connection.query("SELECT * FROM employee ORDER BY id", function (err, res){
          console.table(res);
 
   //Use the response to populate

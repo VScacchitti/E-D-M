@@ -10,10 +10,10 @@ var connection = mysql.createConnection({
     port: 3306,
   
     //username
-    user: "test_user",
+    user: "",
   
     // password and database
-    password: "password",
+    password: "",
     database: "employee_db"
   });
   
@@ -46,7 +46,7 @@ var connection = mysql.createConnection({
       })
       .then((response) => {
 
-        console.log(response);
+       
 
         switch (response.name) {
           default:
