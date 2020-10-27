@@ -1,7 +1,7 @@
 Needed npms:
 mysql
 inquirer
-util
+
 console table (look up)
 
 Need to create connection to mysql- 09-ACtivity
@@ -20,12 +20,6 @@ add department
 Delete department
 
 add update functions
-
-async?
-HelperEMployeeManager
-Helper Array
-
-helper employee
 
 Need DB schema
 

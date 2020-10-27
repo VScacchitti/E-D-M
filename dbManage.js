@@ -84,105 +84,132 @@ showEmployees = (showEmployeeCB) => {
 
 //Add a New Employee
 addEmployee =  (addEmployeeCB) => {
-   //prompts for new employee info
-   inquirer.prompt([{
+
+  connection.query("SELECT * FROM employee", function (err, res){
+
+    console.table(res);
+
+    inquirer.prompt([{
  
-     type: "input",
-     name: "first_name",
-     message: "What is the employee's first name?"
- 
-   },
-   {
-     type: "input",
-     name: "last_name",
-     message:"What is the employee's last name?"
-   },
-    {
       type: "input",
-      name:"role_id",
-      message:"What is the employee's role ID?"
+      name: "first_name",
+      message: "What is the employee's first name?"
+  
     },
     {
       type: "input",
-      name:"manager_id",
-      message: "What is the employee's manager ID?"
-    }
- ]).then( function (res) {
+      name: "last_name",
+      message:"What is the employee's last name?"
+    },
+     {
+       type: "input",
+       name:"role_id",
+       message:"What is the employee's role ID?"
+     },
+     {
+       type: "input",
+       name:"manager_id",
+       message: "What is the employee's manager ID? If no manager please press enter."
+     }
+  ]).then( function (res) {
+ 
+   let data = {
+     first_name: res.first_name,
+     last_name: res.last_name,
+     role_id: res.role_id
+   }
+   if (res.manager_id){
+     data.manager_id = res.manager_id
+   };
+   
+   connection.query("INSERT INTO employee SET ?", data, function (err, res) {
+     console.log(err);
+     console.log("New employee added sucessfully.");
+   // Displays employees
+   showEmployees(addEmployeeCB);
+ });
+   
+  })
 
-  let data = {
-    first_name: res.first_name,
-    last_name: res.last_name,
-    role_id: res.role_id
-  }
-  if (res.manager_id){
-    data.manager_id = res.manager_id
-  }
-  connection.query("INSERT INTO employee SET ?", data, function (err, res) {
-    console.log(err);
-    console.log("New employee added sucessfully.");
-  // Displays employees
-  showEmployees(addEmployeeCB);
-});
-  
- })
+  })
  };
  
  //Add a New Department
   addDepartment = (addDepartCB) => {
+
+    connection.query("SELECT * FROM department", function (err, res){
+      console.table(res);
+
+      inquirer.prompt([{
+ 
+        type: "input",
+        name: "department",
+        message: "What kind of department would you like to add?"
     
-    inquirer.prompt([{
- 
-     type: "input",
-     name: "department",
-     message: "What kind of department would you like to add?"
- 
-   },
- ]).then( function (res) {
-   connection.query("INSERT INTO department SET ?", [
-     {deptName:res.department}
-    ], function (err, res){
-     
-     console.log('Department was added successfully.');
-     
-     showDepartments(addDepartCB);
-   })
- })
+      },
+    ]).then( function (res) {
+      connection.query("INSERT INTO department SET ?", [
+        {deptName:res.department}
+       ], function (err, res){
+        
+        console.log('Department was added successfully.');
+        
+        showDepartments(addDepartCB);
+      })
+    })
+    
+    
+    
+    
+    
+    })
+    
+    
  };
  
  addRole = (addRoleCB) => {
-   //prompts for new employee info
-   inquirer.prompt([{
+
+  connection.query("SELECT * FROM role", function (err, res){
+
+    console.table(res);
+
+    inquirer.prompt([{
  
-     type: "input",
-     name: "title",
-     message: "What is the title of this role?"
- 
-   },
-   {
-     type: "input",
-     name: "salary",
-     message:"What is the salary of this role?"
-   },
-    {
-      type: "number",
-      name:"department_id",
-      message:"What is the Department ID for this role?"
+      type: "input",
+      name: "title",
+      message: "What is the title of this role?"
+  
     },
- ]).then( function (res){
-   connection.query("INSERT INTO role SET ?", [
+    {
+      type: "input",
+      name: "salary",
+      message:"What is the salary of this role?"
+    },
      {
-       title: res.title,
-       salary: res.salary,
-       department_id: res.department_id
-     }
-    ], function (){
-     console.log( `${res.title} was added successfully`);
-     
-     // Shows table of roles
-     showRoles(addRoleCB);
-   })
+       type: "number",
+       name:"department_id",
+       message:"What is the Department ID for this role?"
+     },
+  ]).then( function (res){
+    connection.query("INSERT INTO role SET ?", [
+      {
+        title: res.title,
+        salary: res.salary,
+        department_id: res.department_id
+      }
+     ], function (){
+      console.log( `${res.title} was added successfully`);
+      
+      // Shows table of roles
+      showRoles(addRoleCB);
+    })
+    
+  })
+  
+  
+  })
+   //prompts for new employee info
    
- })
  }; 
 
  //-------------------------------------------------------
@@ -305,6 +332,7 @@ addEmployee =  (addEmployeeCB) => {
  removeRole = (removeRoleCB) => {
 
     connection.query("SELECT * FROM role", function (err, res){
+      console.table(res);
 
         inquirer.prompt([{
  
@@ -332,6 +360,8 @@ addEmployee =  (addEmployeeCB) => {
 
 
   connection.query("SELECT * FROM department", function (err, res){
+
+    console.table(res);
 
       inquirer.prompt([{
 
