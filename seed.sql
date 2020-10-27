@@ -1,4 +1,4 @@
-    INSERT INTO department
+INSERT INTO department
     (id, deptName)
 VALUES
     (1, "Human Resources");
